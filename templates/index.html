@@ -1,3 +1,5 @@
+{% load mezzanine_tags %}
+
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -21,6 +23,12 @@
         <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css">
 
         <script src="{{ STATIC_URL }}js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        {% if user.is_staff %}
+        <script src="{{ STATIC_URL }}mezzanine/js/jquery-1.7.1.min.js"></script>
+        {% else %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+        {% endif %}
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -37,76 +45,126 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">Leslie Sbrocco</a>
+                    <a class="brand active" data-target=".carousel" data-slide-to="0">Leslie Sbrocco</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav nav-pills nav-stacked">
-                            <li class="active"><a href="#">About</a></li>
-                            <li><a href="#about">Speaking</a></li>
-                            <li><a href="#about">Watch</a></li>
-                            <li><a href="#contact">Learn</a></li>
-                            <li><a href="#contact">Press</a></li>
-                            <li><a href="#contact">Contact</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li class="nav-header">Nav header</li>
-                                    <li><a href="#">Separated link</a></li>
-                                    <li><a href="#">One more separated link</a></li>
-                                </ul>
-                            </li>
+                            {% for page in content_pages %}
+                            <li><a id="{{ page.title|slugify }}" data-target=".carousel" data-slide-to="{{ forloop.counter|add:'2' }}">{{ page.title }}</a></li>
+                            {% endfor %}
+                            <li><a id="{{ form_page.title|slugify }}" data-target=".carousel" data-slide-to="{{ content_pages.count|add:'3' }}">{{ form_page.title }}</a></li>
                         </ul>
-                        <form class="navbar-form pull-right">
-                            <input class="span2" type="text" placeholder="Email">
-                            <input class="span2" type="password" placeholder="Password">
-                            <button type="submit" class="btn">Sign in</button>
-                        </form>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
         </div>
 
         <div class="container">
+            <div id="leslie-sbrocco-slideshow" class="carousel slide" data-interval="false">
+              <!-- Carousel items -->
+              <div class="carousel-inner">
+                <div class="active item"></div>
+                <div class="item twitter-feed">
+                  <div class="row">
+                    <div class="span-main-item">
+                      <a class="twitter-timeline"  href="https://twitter.com/lesliesbrocco"  data-widget-id="358755823117275137">Tweets by @lesliesbrocco</a>
+                      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    </div>
+                  </div>
+                </div>
+                <div class="item thirsty-girl">
+                  <div class="row">
+                    <div class="span-main-item">
+                      <a href="http://thirstygirl.com/" target="_blank">  
+                        <img class="thirsty-girl-logo" src="{{ STATIC_URL }}img/thirsty_girl_logo.png" />
+                      </a>
+                      <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/beathirstygirl" data-widget-id="358843405020823552">Tweets by @beathirstygirl</a>
+                      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    </div>
+                  </div>
+                </div>
+                {% for page in content_pages %}
+                <div class="item {{ page.title|slugify }}">
+                  <div class="span-section span4">
+                    {% editable page.title page.content %}
+                    {% autoescape off %}
+                    {{ page.content }}
+                    {% endautoescape %}
+                    {% endeditable %}
+                    {% editable_loader %} 
+                  </div>
+                </div>
+                {% endfor %}
+                
+                <div class="item {{ form_page.title|slugify }}">
+                  <div class="span-section span4">
+                    {% if request.GET.sent %}
+                        {% editable form_page.response %}
+                        {{ form_page.response|richtext_filters|safe }}
+                        {% endeditable %}
+                    {% else %}
+                        {% editable form_page.content %}
+                        {{ form_page.content|richtext_filters|safe }}
+                        {% endeditable %}
+                        <form method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+                            {% csrf_token %}
+                            {% for field in form_page.fields.all %}
+                            {{ field.label }}
+                            <input type="text">
+                            {% endfor %}
+                            <input class="btn btn-action" type="submit" value="{{ form_page.button_text }}">
+                        </form>
+                    {% endif %}
+                  </div>
+                </div>
 
-            <!-- Main hero unit for a primary marketing message or call to action -->
-            <div class="hero-unit">
-                <h1>Hello, world!</h1>
-                <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-                <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+              </div>
+              
+              
+              <div class="span-call-to-action">
+                <div class="row">
+                  <div class="span-section span2">
+                    <h3>Work &amp; Travel with Leslie</h3>
+                    <a class="btn btn-action" data-target=".carousel" data-slide-to="4">Learn more</a>
+                  </div>
+                
+                  <div class="span-section span2">
+                    <h3>Stay in touch with Leslie</h3>
+                    <a class="btn btn-action" data-target=".carousel" data-slide-to="5">Join newsletter</a>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Social media icons -->
+              <a class="social-media-icon facebook" href="https://www.facebook.com/leslie.hartleysbrocco" target="_blank">
+                <img src="{{ STATIC_URL }}img/facebook.png" />
+              </a>
+              <a class="social-media-icon twitter" href="https://twitter.com/lesliesbrocco" target="_blank">
+                <img src="{{ STATIC_URL }}img/twitter.png" />
+              </a>
+              <a class="social-media-icon linkedin" href="http://linkedin.com/pub/leslie-sbrocco/3/208/7b0/" target="_blank">
+                <img src="{{ STATIC_URL }}img/linkedin.png" />
+              </a>
+              <a class="social-media-icon pinterest" href="http://pinterest.com/lesliesbrocco/" target="_blank">
+                <img src="{{ STATIC_URL }}img/pinterest.png" />
+              </a>
+              <a class="social-media-icon thirstygirl" href="http://thirstygirl.com/" target="_blank">
+                <img src="{{ STATIC_URL }}img/thirstygirl.png" />
+              </a>
+              
+              <!-- Carousel nav -->
+              <a class="carousel-control left" href="#leslie-sbrocco-slideshow" data-slide="prev">&lsaquo;</a>
+              <a class="carousel-control right" href="#leslie-sbrocco-slideshow" data-slide="next">&rsaquo;</a>
             </div>
+            
+            
 
             <!-- Example row of columns -->
-            <div class="row">
-                <div class="span4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-                </div>
-                <div class="span4">
-                    <h2>Heading</h2>
-                    <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-               </div>
-                <div class="span4">
-                    <h2>Heading</h2>
-                    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                    <p><a class="btn" href="#">View details &raquo;</a></p>
-                </div>
-            </div>
+            
 
-            <hr>
-
-            <footer>
-                <p>&copy; Company 2012</p>
-            </footer>
+            
+            <footer></footer>
 
         </div> <!-- /container -->
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
 
         <script src="{{ STATIC_URL }}js/vendor/bootstrap.min.js"></script>
 
@@ -118,6 +176,35 @@
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src='//www.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        
+        <script>
+        $(document.documentElement).keyup(function (event) {
+              // handle cursor keys
+              if (event.keyCode == 37 || event.keyCode == 38) {
+                $('a.carousel-control.left').trigger('click');
+              } else if (event.keyCode == 39 || event.keyCode == 40) {
+                $('a.carousel-control.right').trigger('click');
+              }
+            });
+            
+        $(document).ready(function() {
+            $('#leslie-sbrocco-slideshow').bind('slid', function() {
+                {% for page in pages %}
+                {% if forloop.first %}
+                if ($('.item.active').hasClass('{{ page.title|slugify }}') && $('#{{ page.title|slugify }}').hasClass('active') == false) {
+                {% else %}
+                else if ($('.item.active').hasClass('{{ page.title|slugify }}') && $('#{{ page.title|slugify }}').hasClass('active') == false) {
+                {% endif %}
+                    $('.navbar-inner .nav-pills a').removeClass('active');
+                    $('#{{ page.title|slugify }}').addClass('active');
+                    }
+                {% endfor %}
+                else {
+                    $('.navbar-inner .nav-pills a').removeClass('active');
+                    }
+                });
+            });
         </script>
     </body>
 </html>

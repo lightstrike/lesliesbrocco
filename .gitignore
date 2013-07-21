@@ -34,4 +34,4 @@ nosetests.xml
 .DS_Store
 .coverage
 local_settings.py
-
+.sass-cache

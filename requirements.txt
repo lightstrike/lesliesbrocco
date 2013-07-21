@@ -1,2 +1,6 @@
 django==1.5.1
 Mezzanine==1.4.9
+
+# AWS
+django-storages==1.1.8
+boto==2.9.8

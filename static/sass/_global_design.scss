@@ -1,0 +1,154 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background: url("../img/leslie_sbrocco_background.png") no-repeat center center fixed;
+    -webkit-background-size: 100%; 
+    -moz-background-size: 100%; 
+    -o-background-size: 100%; 
+    background-size: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/leslie_sbrocco_background.png', sizingMethod='scale');
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/leslie_sbrocco_background.png', sizingMethod='scale')";
+    overflow-y: hidden;
+    
+    font-family: $primary_font_family;
+    font-size: 13px;
+    line-height: 130%;
+    color: $white;
+
+    a:hover {
+        color: $green;
+    }
+}
+
+@media only screen and (min-width : 320px) and (max-width : 480px) {
+body {
+	background: url("../img/leslie_sbrocco_background_mobile.png") no-repeat center center fixed;
+}
+}
+
+@media screen and (orientation:portrait) {
+body {
+	background: url("../img/leslie_sbrocco_background_mobile.png") no-repeat center center fixed;
+}
+}
+
+
+p {
+    margin: 0 0 17px;
+}
+
+a {
+    color: $white;
+    cursor: pointer;
+    
+    &:hover {
+        color: $green;
+        text-decoration: underline;
+    }
+}
+
+/* None of the following belongs in this file */
+
+#editable-toolbar {
+    margin-top: 45px;
+}
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a {
+    color: $white;
+    margin-top: 0px;
+    border-radius: 0px;
+    font-size: 18px;
+    height: 18px;
+    
+    &:hover {
+        color: $white;
+        background-color: $purple;
+    }
+}
+
+a.active {
+    color: $white;
+    background-color: $purple;
+}
+
+.container, #leslie-sbrocco-slideshow, #leslie-sbrocco-slideshow .item {
+    height: 100%;
+}
+
+.span-main-item {
+    @extend .span6;
+}
+
+.span-call-to-action {
+    @extend .span5;
+    position: absolute;
+    right: 10%;
+    bottom: 15%;
+}
+
+.span-section {
+    padding: 20px;
+    background-color: $grey;
+    color: $light-grey;
+}
+
+.carousel-control-container {
+    position: relative;
+}
+
+.carousel-control  {
+    left: auto;
+    right: 5px;
+    top: 60%;
+    
+    color: $white;
+    opacity: .7;
+    
+    &:hover {
+        background-color: $purple;
+    }
+}
+
+.carousel-control.right {
+    top: 70%;
+}
+
+.social-media-icon {
+    position: absolute;
+    right: 5px;
+    height: 40px;
+    width: 40px;
+    max-height: 10%;
+}
+
+.social-media-icon.facebook {
+    top: 0%;
+}
+
+.social-media-icon.twitter {
+    top: 10%;
+}
+
+.social-media-icon.linkedin {
+    top: 20%;
+}
+
+.social-media-icon.pinterest {
+    top: 30%;
+}
+
+.social-media-icon.thirstygirl {
+    top: 40%;
+}
+
+.thirsty-girl-logo {
+
+}
+
