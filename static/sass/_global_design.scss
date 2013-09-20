@@ -78,7 +78,7 @@ a.active {
     background-color: $purple;
 }
 
-.container, #leslie-sbrocco-slideshow, #leslie-sbrocco-slideshow .item {
+.container, #leslie-sbrocco-slideshow, .carousel-inner, #leslie-sbrocco-slideshow .item {
     height: 100%;
 }
 
@@ -95,8 +95,10 @@ a.active {
 
 .span-section {
     padding: 20px;
-    background-color: $grey;
-    color: $light-grey;
+    background-color: $white-background;
+    color: $grey;
+    overflow-y: auto;
+    max-height: 80%;
 }
 
 .carousel-control-container {
@@ -152,3 +154,7 @@ a.active {
 
 }
 
+.blog-publish-date {
+    @extend .pull-right;
+    line-height: 40px;
+    }

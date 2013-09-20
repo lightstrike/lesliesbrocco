@@ -12,14 +12,12 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
         <style>
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css">
 
         <script src="{{ STATIC_URL }}js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -52,6 +50,7 @@
                             <li><a id="{{ page.title|slugify }}" data-target=".carousel" data-slide-to="{{ forloop.counter|add:'2' }}">{{ page.title }}</a></li>
                             {% endfor %}
                             <li><a id="{{ form_page.title|slugify }}" data-target=".carousel" data-slide-to="{{ content_pages.count|add:'3' }}">{{ form_page.title }}</a></li>
+                            <li><a id="blog" data-target=".carousel" data-slide-to="{{ content_pages.count|add:'4' }}">Blog</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -61,7 +60,7 @@
         <div class="container">
             <div id="leslie-sbrocco-slideshow" class="carousel slide" data-interval="false">
               <!-- Carousel items -->
-              <div class="carousel-inner">
+              <div class="carousel-inner row">
                 <div class="active item"></div>
                 <div class="item twitter-feed">
                   <div class="row">
@@ -84,17 +83,17 @@
                 </div>
                 {% for page in content_pages %}
                 <div class="item {{ page.title|slugify }}">
-                  <div class="span-section span4">
-                    {% editable page.title page.content %}
+                  <div class="span-section span5">
+                    {% editable page.title page.richtextpage.content %}
                     {% autoescape off %}
-                    {{ page.content }}
+                    {{ page.richtextpage.content }}
                     {% endautoescape %}
                     {% endeditable %}
                     {% editable_loader %} 
                   </div>
                 </div>
                 {% endfor %}
-                
+                 
                 <div class="item {{ form_page.title|slugify }}">
                   <div class="span-section span4">
                     {% if request.GET.sent %}
@@ -117,6 +116,28 @@
                   </div>
                 </div>
 
+                <div class="item {{ post.title|slugify }}">
+                  <div class="span-section span5">
+                    <h3>Blog</h3>
+                    {% for post in blog_posts %}
+                    {% editable post.title post.content %}
+                    <div class="row">
+                      <div class="span3">
+                        <h4>{{ post.title }}</h4>
+                      </div>
+                      <div class="span2">
+                        <div class="blog-publish-date">{{ post.publish_date }}</div>
+                      </div>
+                    </div>
+                    <hr /><br />
+                    {% autoescape off %}
+                    {{ post.content }}
+                    {% endautoescape %}
+                    {% endeditable %}
+                    {% endfor %}
+                  </div>
+                </div>
+                
               </div>
               
               
